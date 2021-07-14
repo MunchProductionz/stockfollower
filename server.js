@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;   // Åpne env på server, 8080 kan være opptatt
 
 const routes = require('./routes/api');
-
+//halla bø
 
 // MongoDB
 mongoose.connect('mongodb://localhost/afdev', {
