@@ -3,12 +3,8 @@ const mongoose = require('mongoose');
 // Schema
 const Schema = mongoose.Schema;
 const StockSchema = new Schema({
-    title: String,
-    price: Number,
-    date: {
-        type: String,
-        default: Date.now()
-    }
+    ticker: {type: String, required: true},
+    price: Number
 });
 
 // Model
