@@ -2,13 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-const BlogPost = require('../models/blogPost');
+const Stock = require('../models/stock');
 
 
 // Routes
 router.get('/', (req, res) => {
 
-    BlogPost.find({ })                              // Finds all data from db
+    Stock.find({ })                              // Finds all data from db
         .then((data) => {
             console.log('Data: ', data);
             res.json(data);                         // Writes data to server
@@ -21,15 +21,15 @@ router.get('/', (req, res) => {
 router.post('/save', (req, res) => {
     const data = req.body;
 
-    const newBlogPost = new BlogPost(data);
+    const newStock = new Stock(data);
 
-    newBlogPost.save((error) => {
+    newStock.save((error) => {
         if (error) {
             res.status(500).json({ msg: 'Sorry, internal server errors'});
             return;
         }
 
-        // BlogPost
+        // Stock
         res.json({
             msg: 'Your data has been saved!'
         });

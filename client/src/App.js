@@ -8,76 +8,79 @@ class App extends React.Component {
 
 
   state = {
-    title: '',
-    body: '',
-    posts: []
+    ticker: '',
+    price: '',
+    stocks: []
   };
 
   componentDidMount = () => {
-    this.getBlogPost();
+    this.getStock();
   };
 
-  getBlogPost = () => {
+  getStock = () => {
     axios.get('/api')
       .then((response) => {
         const data = response.data;
-        this.setState({ posts: data });
-        console.log('Data has been received!');
+        this.setState({ stocks: data });         // Wat
+        console.log('Stock has been received!');
       })
       .catch(() => {
-        alert('Error retrieving data.')     // Need exception-handling
+        alert('Error retrieving stock data.')   // Need exception-handling
       });
-  };
-
+  }
 
   handleChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value });
+    this.setState({
+      [name]: value
+    });
   };
 
-  submit = (event) => {
+  submitStock = (event) => {
     event.preventDefault();
 
     const payload = {
-      title: this.state.title,
-      body: this.state.body
+      ticker: this.state.ticker,
+      price: this.state.price
     }
 
-
     axios({
-      url: '/api/save',
+      url: 'api/save',
       method: 'POST',
       data: payload
     })
       .then(() => {
-        console.log('Data has been sent to the server');
-        this.resetUserInputs();
-        this.getBlogPost();
+        console.log('Stock has been sent to the server');
+        this.resetUserStockInputs();
+        this.getStock();
       })
       .catch(() => {
-        console.log('Internal server error');
+        console.log('Stock: Internal server error');
       });
   };
 
-  resetUserInputs = () => {
+  resetUserStockInputs = () => {
     this.setState({
-      title: '',
-      body: ''
+      ticker: '',
+      price: ''
     });
   };
 
-  displayBlogPost = (posts) => {
-    
-    if (!posts.length) return null;
+  display = (posts, stock) => {
+    this.displayStock(this.stock);
+  }
 
-    return posts.map((post, index) => (
-      <div key={index} className="blog-post_display">
-        <h3>{post.title}</h3>
-        <p>{post.body}</p>
+  displayStock = (stocks) => {
+    
+    if (!stocks.length) return null;
+
+    return stocks.map((stock, index) => (
+      <div key={index} className="stock_display">
+        <h3>{stock.ticker}</h3>
+        <p>{stock.price}</p>
       </div>
     ));
   };
-
 
 
   render() {
@@ -88,35 +91,34 @@ class App extends React.Component {
     return(
       <div className="app">
         <h2>Welcome to my App</h2>
-        <form onSubmit={this.submit}>
+        <form onSubmit={this.submitStock}>
           <div className="form-input">
             <input
               type="text"
-              name="title"
-              placeholder="Title"
-              value={this.state.title}
+              name="ticker"
+              placeholder="Ticker"
+              value={this.state.ticker}
               onChange={this.handleChange}
             />
           </div>
           <div className="form-input">
             <textarea 
-              name="body"
-              placeholder="Text"  
+              name="price"
+              placeholder="Price"  
               id="" 
-              cols="30" 
-              rows="10" 
-              value={this.state.body}
+              cols="1" 
+              rows="1" 
+              value={this.state.price}
               onChange={this.handleChange}
             >
-
             </textarea>
           </div>
 
-          <button>Submit</button>
+          <button>Add Stock</button>
         </form>
 
-        <div className="blog-">
-          {this.displayBlogPost(this.state.posts)}
+        <div className="stock_display">
+          {this.displayStock(this.state.stocks)}
         </div>
       </div>
     );
